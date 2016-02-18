@@ -7,6 +7,8 @@ data = {
         'money_curve': '3 * %d',
         'speed': 5
     },
+    'items': [
+        ('04000019_2', 15), ('04000019_1', 30), (None, 55)],
     'actions': {
         'appear': [
             {'topleft': (0, 0), 'size': (33, 23)},

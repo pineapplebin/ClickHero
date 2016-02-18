@@ -15,6 +15,8 @@ class BaseMob(pygame.sprite.Sprite):
         self.max_hp = mobinfo['hp']
         self.money = mobinfo['money']
         self.speed = mobinfo['speed']
+        # pass items-list's reference, it will change together
+        self.items = mobinfo['items']
         self.knockback = 3
         self.field_range = (fielddata[0]+1, fielddata[0]+fielddata[2]-1)
         self.images = mobimgs
@@ -69,6 +71,14 @@ class BaseMob(pygame.sprite.Sprite):
     def is_die(self):
         if self.hp <= 0:
             return True
+
+    def drop_item(self):
+        random = randint(1, 100)
+        for item_id, chance in self.items:
+            if random <= chance:
+                return item_id
+            random -= chance
+        return None
 
     def get_pos(self, point='bottomleft'):
         if not self.image:

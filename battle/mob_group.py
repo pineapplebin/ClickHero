@@ -1,6 +1,5 @@
 import pygame
 import lib
-import battle
 from pygame.sprite import Group
 from util import get_file_path
 
@@ -20,7 +19,8 @@ class MobGroup(Group):
                 'id': _datas['info']['id'],
                 'hp': eval(_datas['info']['hp_curve'] % level),
                 'money': eval(_datas['info']['money_curve'] % level),
-                'speed': _datas['info']['speed']}
+                'speed': _datas['info']['speed'],
+                'items': [_tuple for _tuple in _datas['items']]}
             self.mob_info_list[_id] = _tmp_data
             # get each action sub-surface from origin image
             _image_origin = self._load_image(_id)
