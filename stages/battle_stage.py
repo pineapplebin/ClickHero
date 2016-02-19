@@ -19,11 +19,11 @@ class BattleStage(BaseStage):
         self.item_group = None
 
     def init(self, initargs):
-        battle.effect.init()
         mapdata = lib.pkl.load_map_data(initargs['mapname'])
         self.mob_id = mapdata['mob_id']
         self.field = Field(mapdata)
         self.mob_group = MobGroup(self.mob_id, self.field_level)
+        battle.effect.init()
         if not self.item_group:
             self.item_group = ItemGroup()
         self.create_mob()
@@ -45,13 +45,14 @@ class BattleStage(BaseStage):
     def exit(self):
         self.field.empty()
         self.mob_group.empty()
+        battle.effect.init()
 
     def battle_clear(self, mob_list):
-        damage, is_critical = lib.player.do_damage()
+        total_damage, damage_list = lib.player.do_damage()
         for _mob in mob_list:
-            _mob.hit(damage)
+            _mob.hit(total_damage)
             _x, _y = _mob.get_pos('topcenter')
-            battle.effect.new_damage(damage, (_x, _y-10), is_critical)
+            battle.effect.new_damage(damage_list, (_x, _y-10))
             if _mob.is_die():
                 _money = _mob.money
                 _item_id = _mob.drop_item()
