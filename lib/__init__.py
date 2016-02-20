@@ -3,7 +3,8 @@ from lib.event import Event
 from lib.draw import Draw
 from lib.store import Pickle
 from lib.store import Database
-from lib.player import Player
+
+from model.player import Player
 
 event = Event()
 draw = Draw()

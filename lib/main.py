@@ -1,7 +1,7 @@
 import pygame
 import threading
 import lib
-from stages import StageFactory
+from view import StageFactory
 from lib.constant import *
 
 
@@ -24,7 +24,7 @@ class StageManager:
                 self.change_stage(new_stage)
             elif new_stage['change_type'] == E_LOADINGDONE:
                 self.curr_stagename = new_stage['stagename']
-        self.stages[self.curr_stagename].update()
+        self.stages[self.curr_stagename].render()
         lib.draw.draw_mouse()
         pygame.display.update()
 

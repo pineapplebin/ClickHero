@@ -1,12 +1,12 @@
 import pygame
 import lib
-from copy import copy
 from util import get_file_path
 from util.iqueue import IQueue
 
 NORMAL_DAMAGE = (31, 33)
 CRITICAL_DAMAGE = (37, 38)
 MAX_DAMAGE_COUNT = 50
+CRITICAL_ICON_WIDTH = 15
 
 
 class Effect:
@@ -18,7 +18,9 @@ class Effect:
                 (i*NORMAL_DAMAGE[0], 0), NORMAL_DAMAGE) for i in range(10)],
             'critical': [self._image.subsurface(
                 (i*CRITICAL_DAMAGE[0], NORMAL_DAMAGE[1]),
-                CRITICAL_DAMAGE) for i in range(10)]}
+                CRITICAL_DAMAGE) for i in range(10)],
+            'critical_icon': self._image.subsurface(
+                (0, NORMAL_DAMAGE[1]+CRITICAL_DAMAGE[1]), (44, 38))}
         self.damage_queue = IQueue(MAX_DAMAGE_COUNT)
         self.passed_time_second = 0
 
@@ -49,10 +51,17 @@ class Effect:
         _cell_w, _cell_h = CRITICAL_DAMAGE if is_critical else NORMAL_DAMAGE
         _blanking = int(_cell_w * 0.65)
         _img_w, _img_h = _cell_w+_blanking*(len(_str_num)-1), _cell_h+3
+        if is_critical:
+            _img_w += CRITICAL_ICON_WIDTH
         image = pygame.Surface((_img_w, _img_h), flags=pygame.locals.SRCALPHA)
+        if is_critical:
+            image.blit(self.damage_images['critical_icon'], (0, 0))
         for _i, _n in enumerate(_str_num):
             y = 3 if _i % 2 != 0 else 0
-            image.blit(self.damage_images[_type][int(_n)], (_i*_blanking, y))
+            offset_x = CRITICAL_ICON_WIDTH if is_critical else 0
+            image.blit(
+                self.damage_images[_type][int(_n)],
+                (_i*_blanking+offset_x, y))
         return image
 
     def _new_damage_list(self, damage_list, center):

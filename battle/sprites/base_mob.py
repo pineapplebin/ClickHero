@@ -57,6 +57,10 @@ class BaseMob(pygame.sprite.Sprite):
         lib.draw.fill(
             C_LIFEGREEN, (_bar_x+3, _bar_y+3, _bar_w, BAR_SIZE[1]-6))
 
+    def get_render_data(self):
+        return (self.image, (self.get_pos('topleft')),
+                self.hp/self.max_hp, (self.get_pos('bottomcenter')))
+
     def collide(self, pos):
         if self.rect and not self.is_invicible:
             if self.rect.collidepoint(pos):
@@ -92,6 +96,8 @@ class BaseMob(pygame.sprite.Sprite):
             return self.bottomleft[0]+_w/2, self.bottomleft[1]
         elif point == 'topcenter':
             return self.bottomleft[0]+_w/2, self.bottomleft[1]-_h
+        elif point == 'topleft':
+            return self.bottomleft[0], self.bottomleft[1]-_h
 
     def set_image(self, state_key, index):
         _is_filp = True if self.direction > 0 else False
